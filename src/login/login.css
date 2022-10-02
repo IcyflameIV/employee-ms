@@ -1,0 +1,17 @@
+html,
+body {
+ align-items: center;
+  background-color: #f2f2f2;
+ 
+}
+.form{
+    text-align: center;
+    max-width: 330px;
+    padding: 15px;
+  
+    background-color: whitesmoke;
+}
+.btn{
+    background-color: black;
+   
+}

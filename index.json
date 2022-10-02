@@ -1,0 +1,47 @@
+{
+  "Members": [
+    {
+      " id": 1,
+      "first": "Nirmala",
+      "last": "Lamsal",
+      "email": "LamsalNiru2@gmail.com",
+      "role": "Member"
+    },
+    {
+      "id": 2,
+      "first": "Dev",
+      "last": "Joshi",
+      "email": "Dev2055@gmail.com",
+      "role": "Admin"
+    },
+    {
+      "id": 3,
+      "first": "Nitu",
+      "last": "Thapa",
+      "email": "nitu002T@gmail.com",
+      "role": "Member"
+    },
+    {
+      "id": 4,
+      "first": "Penju",
+      "last": "Magar",
+      "email": "penjumgr@gmail.com",
+      "role": "Admin"
+    },
+    {
+      "id": 5,
+      "first": "Ajad",
+      "last": "RajBhandari",
+      "email": "AjadR2@gmail.com",
+      "role": "Member"
+    },
+    {
+      "id": 6,
+      "first": "Hari",
+      "last": "Tiwari",
+      "email": "hari_t@gmail.com",
+      "role": "Member"
+    }
+   
+  ]
+}
