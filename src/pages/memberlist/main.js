@@ -2,21 +2,47 @@ import { React, useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Navbar from "../../layout/navbar";
+import { db } from "../../login/firebase";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
+
 
 const Main = () => {
-  const [Members, setMember] = useState([]);
-  useEffect(() => {
-    loadMembers();
-  }, []);
+  const [data, setData] = useState([]);
 
-  const loadMembers = async () => {
-    const result = await axios.get("http://localhost:3003/Members");
-    setMember(result.data);
+  useEffect(() => {
+  const fetchData = async()=>{
+    let list=[]
+    try{
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() });
+      });
+      setData(list);
+    }
+   catch (error){
+      console.log(error);
+    }
   };
-  const deleteMember = async (id) => {
-    await axios.delete("http://localhost:3003/Members/${id}");
-    loadMembers();
+  fetchData();
+}, []);
+ 
+
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, "users", id));
+      setData(data.filter((item) => item.id !== id));
+    } catch (err) {
+      console.log(err);
+    }
   };
+
 
   return (
     <div>
@@ -45,23 +71,23 @@ const Main = () => {
             </tr>
           </thead>
           <tbody>
-            {Members.map((member, index) => (
+            {data.map((data, index) => (
               <tr>
                 <th scope="row">{index + 1}</th>
-                <td>{member.first}</td>
-                <td>{member.last}</td>
-                <td>{member.email}</td>
-                <td>{member.role}</td>
+                <td>{data.Firstname}</td>
+                <td>{data.Lastname}</td>
+                <td>{data.Email}</td>
+                <td>{data.Role}</td>
                 <td>
                   <Link
                     className="btn btn-outline-light"
-                    to="/Edit/${member.id}"
+                    to="/Edit/${data.id}"
                   >
                     <i class="bi bi-pencil-square"></i>
                   </Link>
-                  <Link
+                  <Link 
                     className="btn btn-outline-light  mr-2"
-                    onClick={() => deleteMember(member.id)}
+                    onClick={() =>handleDelete(data.id)}
                   >
                     <i class="bi bi-trash"></i>
                   </Link>
@@ -74,5 +100,5 @@ const Main = () => {
     </div>
   );
 };
-
+  
 export default Main;

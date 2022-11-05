@@ -15,7 +15,6 @@ function Chart() {
         height={400}
         margin={{
           top: 40,
-
           bottom: 5,
         }}
       >
