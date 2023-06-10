@@ -1,37 +1,30 @@
 
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { db } from "../../login/firebase"
-import {addDoc, collection, doc,serverTimestamp,setDoc} from "firebase/firestore";
+import axios from 'axios';
 
 const Add = () => {
-  const [data, setData] = useState({})
-  const navigate = useNavigate()
-  const handleInput = (e) => {
-    const id =e.target.id;
-    const value = e.target.value;
+    const [Firstname,setFirstname] = useState("");
+    const [Lastname,setLastname] = useState("");
+    const [Email,setEmail] = useState("");
+    const [Role,setRole] = useState("");
+    const history = useNavigate()
   
-    setData({ ...data, [id]:value });
-  };
-  console.log(data);
-const OnSubmit = async (e) => {
-    e.preventDefault();
-    try{
-
-  await addDoc(collection(db, "users"), {
-    Firstname:data.first,
-    Lastname:data.last ,
-    Email:data.email,
-    Role: data.role,
-    TimeStamp: serverTimestamp()
-    });
-    navigate("/Members");
+    const OnSubmit = (e) => {
+      e.preventDefault();
+      console.log('click');
+      axios
+      .post('https://64849202ee799e321626d351.mockapi.io/ems',
+      {
+          Firstname: Firstname,
+          Lastname: Lastname,
+          Email: Email,
+          Role: Role
+      })
+      history("/Members");
   }
-  catch(err){
-    console.log(err)
- }
  
-}
+
  
   
   return (
@@ -48,7 +41,7 @@ const OnSubmit = async (e) => {
                 id="first"
                 type="text"
                 placeholder=""
-                onChange={handleInput}
+                onChange={(e)=>setFirstname(e.target.value)}
               />
             </div>
             <div className="form-group col-md-4">
@@ -58,7 +51,7 @@ const OnSubmit = async (e) => {
                 className="form-control"
                 type="text"
                 placeholder=""
-                onChange={handleInput}
+                onChange={(e)=>setLastname(e.target.value)}
               />
             </div>
           </div>
@@ -70,17 +63,20 @@ const OnSubmit = async (e) => {
                 id="email"
                 className="form-control"
                 placeholder="example@gmail.com"
-                onChange={handleInput}
+                onChange={(e)=>setEmail(e.target.value)}
               />
             </div>
-            <div className="form-group col-md-4">
+            <div className="form-group col-md-7">
               <label for="inputRole">Role</label>
-              <div className="col-auto my-4">
-                <select className="custom-select mr-sm-4"  onChange={handleInput} id="role">
+              <div className="col-auto my-7">
+                <select className="custom-select mr-sm-7"  onChange={(e)=>setRole(e.target.value)} id="role">
                   <option selected>Choose...</option>
                   <option value="Member">Member</option>
                   <option value="Admin">Admin</option>
                   <option value="Manager">Manager</option>
+                  <option value="Designer">Designer</option>
+                  <option value="Director">Director</option>
+                  <option value="Assistant">Assistant</option>
                 </select>
               </div>
             </div>

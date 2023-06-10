@@ -28,7 +28,7 @@ const RequireAuth=({children}) =>{
         <Route  path='/Dashboard' element={<RequireAuth><Dashboard/></RequireAuth>}/> 
         <Route  path='/Members' element={<RequireAuth><Main/></RequireAuth>}/>
         <Route  path='/Add' element={<RequireAuth><Add/></RequireAuth>}/>
-        <Route  path='/Edit/:id' element={<RequireAuth><Edit/></RequireAuth>}/>
+        <Route  path='/Edit' element={<RequireAuth><Edit/></RequireAuth>}/>
    </Routes> 
     </div>
     </BrowserRouter>

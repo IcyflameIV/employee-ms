@@ -1,7 +1,8 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import {React} from "react";
+import {NavLink } from "react-router-dom";
 
 const Navbar = () => {
+ 
   return (
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid">
@@ -31,17 +32,7 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <form class="d-flex" role="search">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </form>
+        
       </div>
     </nav>
   );

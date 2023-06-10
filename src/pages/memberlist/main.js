@@ -2,47 +2,46 @@ import { React, useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Navbar from "../../layout/navbar";
-import { db } from "../../login/firebase";
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
-
 
 const Main = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); 
+  const [query, setQuery] = useState('');
 
+
+  function getData() {
+    axios.get(`https://64849202ee799e321626d351.mockapi.io/ems`).then((res) => {
+      console.log(res.data);
+      setData(res.data);
+    });
+  }
+  
   useEffect(() => {
-  const fetchData = async()=>{
-    let list=[]
-    try{
-      const querySnapshot = await getDocs(collection(db, "users"));
-      querySnapshot.forEach((doc) => {
-        list.push({ id: doc.id, ...doc.data() });
-      });
-      setData(list);
-    }
-   catch (error){
-      console.log(error);
-    }
-  };
-  fetchData();
-}, []);
- 
+    getData();
+  }, []);
+
+  function setToLocal(id, Firstname, Lastname, Email, Role) {
+    localStorage.setItem('id', id);
+    localStorage.setItem('Firstname', Firstname);
+    localStorage.setItem('Lastname', Lastname);
+    localStorage.setItem('Email', Email);
+    localStorage.setItem('Role', Role);
+  }
 
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "users", id));
-      setData(data.filter((item) => item.id !== id));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  function deleteHandler(id) {
+    axios.delete(`https://64849202ee799e321626d351.mockapi.io/ems/${id}`).then(() => {
+      getData();
+    });
+  }
 
+  const filteredData = data.filter((row) => {
+    const { Firstname, Email } = row;
+    const lowerCaseQuery = query.toLowerCase();
+    return (
+      Firstname.toLowerCase().includes(lowerCaseQuery) ||
+      Email.toLowerCase().includes(lowerCaseQuery)
+    );
+  })
 
   return (
     <div>
@@ -55,7 +54,19 @@ const Main = () => {
         <Link className="btn btn-outline-light" to="/Add">
           <i class="bi bi-plus-lg"></i>Add New{" "}
         </Link>
-
+        <form class="d-flex" role="search">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button class="btn btn-outline-success">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
         <table
           class="table border shadow table-hover table-dark
             table-bordered"
@@ -71,23 +82,30 @@ const Main = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((data, index) => (
-              <tr>
-                <th scope="row">{index + 1}</th>
-                <td>{data.Firstname}</td>
-                <td>{data.Lastname}</td>
-                <td>{data.Email}</td>
-                <td>{data.Role}</td>
+             {filteredData.map((row) => (
+              <tr key={row.id}>
+                <th scope="row">{row.id}</th>
+                <td>{row.Firstname}</td>
+                <td>{row.Lastname}</td>
+                <td>{row.Email}</td>
+                <td>{row.Role}</td>
                 <td>
                   <Link
                     className="btn btn-outline-light"
-                    to="/Edit/${data.id}"
+                    to="/Edit"
+                    onClick={() =>
+                      setToLocal(
+                        row.id,
+                        row.Firstname,
+                        row.Lastname,
+                        row.Email,
+                        row.Role)}
                   >
                     <i class="bi bi-pencil-square"></i>
                   </Link>
                   <Link 
                     className="btn btn-outline-light  mr-2"
-                    onClick={() =>handleDelete(data.id)}
+                    onClick={() =>deleteHandler(row.id)}
                   >
                     <i class="bi bi-trash"></i>
                   </Link>
